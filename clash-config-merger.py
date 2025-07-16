@@ -29,16 +29,28 @@ elif args.file != None:
 else:
     raise ValueError("Please provide either --url or --file to load the configuration data.")
 
-if "rules" in patch_data:
-    config_data["rules"] = patch_data["rules"] + config_data["rules"]
-if "external-controller" in patch_data:
-    config_data["external-controller"] = patch_data["external-controller"]
-if "mixed-port" in patch_data:
-    config_data["mixed-port"] = patch_data["mixed-port"]
-if "bind-address" in patch_data:
-    config_data["bind-address"] = patch_data["bind-address"]
-if "allow-lan" in patch_data:
-    config_data["allow-lan"] = patch_data["allow-lan"]
+    
+for key in patch_data:
+    cur = config_data
+    val = patch_data[key]
+    items = key.split("/")
+    for i in range(len(items)):
+        item = items[i]
+        if i == len(items) - 1:
+            if isinstance(val,list):
+                arr = cur[item] if item in cur else []
+                cur[item] = patch_data[key] + arr
+            elif isinstance(val,dict):
+                dic = cur[item] if item in cur else {}
+                dic.update(patch_data[key])
+                cur[item] = dic
+            else:
+                cur[item] = val
+        elif not item in cur:
+            cur = cur[item] = {}
+        else:
+            cur = cur[item]
+
 
 save_path = args.output if args.output != None else f"./config_new.yaml"
 with open(save_path,"w",encoding="utf-8") as sw:
