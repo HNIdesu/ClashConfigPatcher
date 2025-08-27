@@ -18,7 +18,7 @@ if args.url != None:
         url=args.url,
         method="GET",
         headers={
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0"
+            "User-Agent": "ClashforWindows/0.19.26"
         }
     )
     with request.urlopen(req) as res:
